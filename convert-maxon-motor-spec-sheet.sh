@@ -1,0 +1,1 @@
+less hoge.pdf| grep -v ciency | sed -n '16,31p' | sed -e 's/cm2//' -e 's/[A-z,\/,%]//g' -e 's/(. \+)//' -e 's/\ \+//' | cut -f2- -d' ' | sed 's/ \+/,/g'
