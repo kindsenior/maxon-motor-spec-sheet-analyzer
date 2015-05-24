@@ -16,7 +16,8 @@ function pushMotorData(){
 		less ${page_pdf}| grep -v ciency | sed -n -e "${row0},${row1}p;${row2},${row3}p" | sed -e 's/cm2//' -e 's/[A-z,\/,%]//g' -e 's/(. \+)//' -e 's/\ \+//' | cut -f2- -d' ' | sed 's/ \+/,/g' | cat >> ${page_txt}
 
 		# insert Motor Name to each column head
-		for i in `seq \`sed -n '2,2p' ${page_txt} | sed -e 's/[^,]//g;s/$//' | wc -m\` `
+		# for i in `seq \`sed -n '2,2p' ${page_txt} | sed -e 's/[^,]//g;s/$//' | wc -m\` `
+		for i in $(seq $(sed -n '2,2p' ${page_txt} | sed -e 's/[^,]//g;s/$//' | wc -m) )
 		do
 				less ${page_pdf}| sed -n 1,1p | sed -e 's/\,//g;s/ \+/ /g;s/^/,/' | paste - ${page_txt} > tmp.txt
 				cat tmp.txt > ${page_txt}
