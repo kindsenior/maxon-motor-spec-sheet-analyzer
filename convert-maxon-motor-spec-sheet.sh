@@ -56,6 +56,7 @@ echo "Done"
 detectMotorDataTable ${template}
 echo "Motor Type" | cat > ${target}.csv
 less ${template}.pdf| grep -v ciency | sed -n -e "${row0},${row1}p;${row2},${row3}p" | sed -e 's/^[0-9 ]\+//' -e 's/ \+/ /g' -e 's/[0-9,., ]\+$//g' >> ${target}.csv
+rm -f ${template}.pdf
 
 # for page in seq 138 160
 for page in `seq 138 140`
