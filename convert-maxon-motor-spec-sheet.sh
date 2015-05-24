@@ -1,4 +1,5 @@
 #!/bin/bash
+export target=maxon_2012-13_eng
 
 function pushMotorData(){
 		echo "pushMotorData"
@@ -20,17 +21,18 @@ function pushMotorData(){
 		for i in $(seq $(expr $(sed -n '2,2p' ${page_txt} | sed -e 's/[^,]//g;s/$//' | wc -m) - 1) )
 		do
 				less ${page_pdf}| sed -n 1,1p | sed -e 's/\,//g;s/ \+/ /g;s/^/,/' | paste - ${page_txt} > tmp.txt
-				cat tmp.txt > ${page_txt}
-				rm -f tmp.txt
+				mv -f tmp.txt ${page_txt}
 		done
+
+		paste ${target}.csv ${page_txt} | cat > tmp.csv
+		mv -f tmp.csv ${target}.csv
+		rm -f ${page_pdf} ${page_txt}
 }
 
-# for page in seq 138 160
-for page in `seq 138 138`
-do
-		echo "now converting page:" ${page} "..."
-		pdftk maxon_2012-13_eng.pdf cat ${page} output ${page}.pdf
-		echo "Done"
+# check Motor Data Table
+# set row0-3
+function detectMotorDataTable(){
+		page=$1
 
 		for i in `seq \`less ${page}.pdf|wc -l\``
 		do
@@ -43,7 +45,28 @@ do
 		export row1=`expr ${row0} + 7`
 		export row2=`expr ${row0} + 9`
 		export row3=`expr ${row0} + 15`
+}
 
+# create row head
+template=template
+template_page=138
+echo "now converting template pdf..."
+pdftk ${target}.pdf cat ${template_page} output ${template}.pdf
+echo "Done"
+detectMotorDataTable ${template}
+echo "Motor Type" | cat > ${target}.csv
+less ${template}.pdf| grep -v ciency | sed -n -e "${row0},${row1}p;${row2},${row3}p" | sed -e 's/^[0-9 ]\+//' -e 's/ \+/ /g' -e 's/[0-9,., ]\+$//g' >> ${target}.csv
+
+# for page in seq 138 160
+for page in `seq 138 140`
+do
+		echo "now converting page:" ${page} "..."
+		pdftk ${target}.pdf cat ${page} output ${page}.pdf
+		echo "Done"
+
+		detectMotorDataTable ${page}
 		pushMotorData ${page}
-done
 
+		sed 's/\t//g' ${target}.csv | cat > ${target}_.csv
+		mv -f ${target}_.csv ${target}.csv
+done
