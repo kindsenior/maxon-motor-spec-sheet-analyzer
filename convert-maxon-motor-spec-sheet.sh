@@ -17,7 +17,7 @@ function pushMotorData(){
 
 		# insert Motor Name to each column head
 		# for i in `seq \`sed -n '2,2p' ${page_txt} | sed -e 's/[^,]//g;s/$//' | wc -m\` `
-		for i in $(seq $(sed -n '2,2p' ${page_txt} | sed -e 's/[^,]//g;s/$//' | wc -m) )
+		for i in $(seq $(expr $(sed -n '2,2p' ${page_txt} | sed -e 's/[^,]//g;s/$//' | wc -m) - 1) )
 		do
 				less ${page_pdf}| sed -n 1,1p | sed -e 's/\,//g;s/ \+/ /g;s/^/,/' | paste - ${page_txt} > tmp.txt
 				cat tmp.txt > ${page_txt}
