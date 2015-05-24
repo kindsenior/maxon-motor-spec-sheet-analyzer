@@ -45,6 +45,8 @@ function detectMotorDataTable(){
 		export row1=`expr ${row0} + 7`
 		export row2=`expr ${row0} + 9`
 		export row3=`expr ${row0} + 15`
+		
+		echo "row0: " ${row0} "  row1: " ${row1} "  row2: " ${row2} "  row3: " ${row3}
 }
 
 # create row head
