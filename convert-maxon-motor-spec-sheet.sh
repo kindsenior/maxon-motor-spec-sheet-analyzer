@@ -14,7 +14,7 @@ function pushMotorData(){
 
 		# extract Motor Data Table
 		echo "" | cat > ${page_txt}
-		less ${page_pdf}| grep -v ciency | sed -n -e "${row0},${row1}p;${row2},${row3}p" | sed -e 's/cm2//;s/[A-z,\/,%]//g;s/(. \+)//;s/^ \+//;s/^[0-9]\+//;s/ \+/,/g' | cat >> ${page_txt}
+		less ${page_pdf}| grep -v ciency | sed -n -e "${row0},${row1}p;${row2},${row3}p" | sed -e 's/cm2//;s/[A-z,\/,%]//g;s/(. \+)//;s/.)//;s/^ \+//;s/^[0-9]\+//;s/ \+/,/g' | cat >> ${page_txt}
 
 		# insert Motor Name to each column head
 		# for i in `seq \`sed -n '2,2p' ${page_txt} | sed -e 's/[^,]//g;s/$//' | wc -m\` `
