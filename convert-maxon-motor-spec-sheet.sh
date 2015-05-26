@@ -1,6 +1,15 @@
 #!/bin/bash
 export target=maxon_2012-13_eng
 
+# count the number of motors
+# using page pdf
+function countMotorNum(){
+		echo "countMotorNum" $1
+		page_pdf=$1.pdf
+		export motor_num=$(expr $(less ${page_pdf} | sed -n ${row_heads["Nominal_voltage"]}p | sed -e 's/[A-z,\/,%]//g;s/^ \+//;s/^[0-9]\+//;s/ \+/,/g;s/[^,]//g;s/$//' | wc -m ) - 1)
+		echo "motor_num:" ${motor_num}
+}
+
 function pushMotorData(){
 		echo "pushMotorData"
 		if [ $# != 1 ]
@@ -93,6 +102,7 @@ do
 		echo "Done"
 
 		detectMotorDataTable ${page}
+		countMotorNum ${page}
 		pushMotorData ${page}
 
 		sed 's/\t//g' ${target}.csv | cat > ${target}_.csv
