@@ -22,23 +22,24 @@ function pushMotorData(){
 		page_txt=$1.txt
 
 		# extract Motor Data Table
-		echo "" | cat > ${page_txt}
-		for idx in ${row_heads[@]}
-		do
-				less ${page_pdf}| grep -v ciency | sed -n -e "${idx}p" | sed -e 's/cm2//;s/[A-z,\/,%]//g;s/(. \+)//;s/.)//;s/^ \+//;s/^[0-9]\+//;s/ \+/,/g' | cat >> ${page_txt}
-		done
+		# echo "" | cat > ${page_txt}
+		pdftotext -raw ${page_pdf} ${page_txt}
+
+		echo "" | cat > tmp.txt
+		grep "^[0-9,.,\ ]*\ [0-9,.,\ ]*$" ${page_txt} | sed -e 's/^/,/;s/\ /,/g'| cat >> tmp.txt
+		mv -f tmp.txt ${page_txt}
 
 		# insert Motor Name to each column head
-		# for i in `seq \`sed -n '2,2p' ${page_txt} | sed -e 's/[^,]//g;s/$//' | wc -m\` `
-		for i in $(seq $(expr $(sed -n '2,2p' ${page_txt} | sed -e 's/[^,]//g;s/$//' | wc -m) - 1) )
+		for i in $(seq ${motor_num} )
 		do
 				less ${page_pdf}| sed -n 1,1p | sed -e 's/\,//g;s/ \+/ /g;s/^/,/' | paste - ${page_txt} > tmp.txt
 				mv -f tmp.txt ${page_txt}
 		done
 
 		paste ${target}.csv ${page_txt} | cat > tmp.csv
+		cp tmp.csv ${page}.csv
 		mv -f tmp.csv ${target}.csv
-		rm -f ${page_pdf} ${page_txt}
+		# rm -f ${page_pdf} ${page_txt}
 }
 
 # check Motor Data Table
