@@ -11,7 +11,7 @@ function countMotorNum(){
 }
 
 function pushMotorData(){
-		echo "pushMotorData"
+		echo "pushMotorData" $1
 		if [ $# != 1 ]
 		then
 				echo "given arguments are " $# 1>&2
@@ -43,7 +43,6 @@ function pushMotorData(){
 }
 
 # check Motor Data Table
-# set row0-3
 declare -A row_heads
 # row_heads["Rotor_inertia"]=""
 # row_heads["Mechanical_time_constant"]=""
@@ -60,7 +59,6 @@ declare -A row_heads
 # row_heads["No_load_current"]=""
 # row_heads["No_load_speed"]=""
 row_heads["Nominal_voltage"]=""
-
 function detectMotorDataTable(){
 		echo "detectMotorDataTable" $1
 		page=$1
