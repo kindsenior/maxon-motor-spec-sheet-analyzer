@@ -23,17 +23,28 @@ function pushMotorData(){
 
 		# create Motor Data Table file
 		pdftotext -raw ${page_pdf} ${page_txt}
-
 		echo "" | cat > tmp.txt
-		grep "^[0-9,.,\ ]*\ [0-9,.,\ ]*$" ${page_txt} | sed -e 's/^/,/;s/\ /,/g' | head -n 16 | cat >> tmp.txt
-		if [ $(cat tmp.txt | wc -l) -eq 17 ]
+		grep "^[0-9,.,\ ]*\ [0-9,.,\ ]*$" ${page_txt} | sed -e 's/^/,/;s/\ /,/g' | head -n 18 | cat >> tmp.txt
+		# remove perticular row2
+		row2=$(sed -n 2p tmp.txt | sed -e 's/ \+/ /g')
+		if [ "${row2[*]}" == ',25,100,150,200' ]
 		then
-				mv -f tmp.txt ${page_txt}
+				echo "row2 is perticular"
+				sed -n '1p;3,18p' tmp.txt | cat > tmp_.txt
 		else
+				echo "normal row2"
+				sed -n 1,17p tmp.txt | cat > tmp_.txt
+		fi
+		mv -f tmp_.txt tmp.txt
+		# motor data table size check
+		if [ $(cat tmp.txt | wc -l) -lt 17 ]
+		then
 				echo "row of extracted motor data table is " $(cat tmp.txt | wc -l)
 				echo "failed in extracting motor data table"
 				rm -f tmp.txt
 				return 1
+		else
+				mv -f tmp.txt ${page_txt}
 		fi
 
 		# insert Motor Name to each column head
