@@ -21,8 +21,7 @@ function pushMotorData(){
 		page_pdf=$1.pdf
 		page_txt=$1.txt
 
-		# extract Motor Data Table
-		# echo "" | cat > ${page_txt}
+		# create Motor Data Table file
 		pdftotext -raw ${page_pdf} ${page_txt}
 
 		echo "" | cat > tmp.txt
@@ -44,6 +43,7 @@ function pushMotorData(){
 				mv -f tmp.txt ${page_txt}
 		done
 
+		# insert Motor Data to total data
 		paste ${target}.csv ${page_txt} | cat > tmp.csv
 		cp tmp.csv ${page}.csv
 		mv -f tmp.csv ${target}.csv
