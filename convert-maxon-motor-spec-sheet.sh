@@ -26,8 +26,16 @@ function pushMotorData(){
 		pdftotext -raw ${page_pdf} ${page_txt}
 
 		echo "" | cat > tmp.txt
-		grep "^[0-9,.,\ ]*\ [0-9,.,\ ]*$" ${page_txt} | sed -e 's/^/,/;s/\ /,/g'| cat >> tmp.txt
-		mv -f tmp.txt ${page_txt}
+		grep "^[0-9,.,\ ]*\ [0-9,.,\ ]*$" ${page_txt} | sed -e 's/^/,/;s/\ /,/g' | head -n 16 | cat >> tmp.txt
+		if [ $(cat tmp.txt | wc -l) -eq 17 ]
+		then
+				mv -f tmp.txt ${page_txt}
+		else
+				echo "row of extracted motor data table is " $(cat tmp.txt | wc -l)
+				echo "failed in extracting motor data table"
+				rm -f tmp.txt
+				return 1
+		fi
 
 		# insert Motor Name to each column head
 		for i in $(seq ${motor_num} )
