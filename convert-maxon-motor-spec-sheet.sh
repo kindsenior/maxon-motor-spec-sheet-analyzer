@@ -109,7 +109,7 @@ pdftk ${target}.pdf cat ${template_page} output ${template}.pdf
 echo "Done"
 detectMotorDataTable ${template}
 echo "Motor Type" | cat > ${target}.csv
-less ${template}.pdf| grep -v ciency | sed -n $(echo ${row_heads[@]}"p" | sed 's/ /p;/g') | sed -e 's/^[0-9 ]\+//' -e 's/ \+/ /g' -e 's/[0-9,., ]\+$//g' >> ${target}.csv
+less ${template}.pdf | sed -n '16,24p;26,32p' | sed -e 's/^[0-9 ]\+//' -e 's/ \+/ /g' -e 's/[0-9,., ]\+$//g' >> ${target}.csv
 rm -f ${template}.pdf
 
 # for page in $(seq 138 160; seq 163 171; seq 175 178; seq 180 199)
