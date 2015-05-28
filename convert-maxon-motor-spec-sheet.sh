@@ -112,8 +112,9 @@ echo "Motor Type" | cat > ${target}.csv
 less ${template}.pdf| grep -v ciency | sed -n $(echo ${row_heads[@]}"p" | sed 's/ /p;/g') | sed -e 's/^[0-9 ]\+//' -e 's/ \+/ /g' -e 's/[0-9,., ]\+$//g' >> ${target}.csv
 rm -f ${template}.pdf
 
-# for page in seq 138 160
-for page in `seq 138 140`
+# for page in $(seq 138 160; seq 163 171; seq 175 178; seq 180 199)
+for page in $(seq 138 160; seq 163 163; seq 165 171; seq 175 178; seq 180 184; seq 187 188; seq 189 199)
+# for page in `seq 164 164`
 do
 		echo "now converting page:" ${page} "..."
 		pdftk ${target}.pdf cat ${page} output ${page}.pdf
