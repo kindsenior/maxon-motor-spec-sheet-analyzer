@@ -113,7 +113,7 @@ less ${template}.pdf | sed -n '16,24p;26,32p' | sed -e 's/^[0-9 ]\+//' -e 's/ \+
 rm -f ${template}.pdf
 
 # for page in $(seq 138 160; seq 163 171; seq 175 178; seq 180 199)
-for page in $(seq 138 160; seq 163 163; seq 165 171; seq 175 178; seq 180 184; seq 187 188; seq 189 199)
+for page in $(seq 138 160; seq 163 163; seq 165 171; seq 175 178; seq 180 184; seq 187 188; seq 190 194; seq 197 199)
 # for page in `seq 164 164`
 do
 		echo "now converting page:" ${page} "..."
