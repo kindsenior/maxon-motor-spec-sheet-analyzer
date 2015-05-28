@@ -24,7 +24,7 @@ function pushMotorData(){
 		# create Motor Data Table file
 		pdftotext -raw ${page_pdf} ${page_txt}
 		echo "" | cat > tmp.txt
-		grep "^[0-9,.,\ ]*\ [0-9,.,\ ]*$" ${page_txt} | sed -e 's/^/,/;s/\ /,/g' | head -n 18 | cat >> tmp.txt
+		grep ^[0-9,.,-,\ ,$'\xE2\x80\xA6',-]*\ [0-9,.,-,\ ,$'\xE2\x80\xA6',-]*$ ${page_txt} | sed -e 's/^/,/;s/\ /,/g' | head -n 18 | cat >> tmp.txt
 		# remove perticular row2
 		row2=$(sed -n 2p tmp.txt | sed -e 's/ \+/ /g')
 		if [ "${row2[*]}" == ',25,100,150,200' ]
